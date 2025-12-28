@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icon.png">
-<meta name="theme-color" content="#0f172a">
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> حساب الورق - واثِق - Custom Fonts Edition</title>
+    <title>حساب الورق - واثِق</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+
     <style>
         /* --- ربط الخطوط المرفوعة --- */
         @font-face {
@@ -29,19 +30,11 @@
             --glass-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.4);
             --accent-gradient: linear-gradient(90deg, #a855f7, #06b6d4);
             --text-color: #f1f5f9;
-            
-            /* توزيع الخطوط */
-            --font-main: 'LyonCustom', serif; /* للعنوان والأسماء */
-            --font-ui: 'JFCustom', sans-serif; /* للأزرار والأرقام */
+            --font-main: 'LyonCustom', serif;
+            --font-ui: 'JFCustom', sans-serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
 
         body {
             background: #0f172a;
@@ -56,140 +49,34 @@
             align-items: center;
         }
 
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: var(--glass-border);
-            border-radius: 12px;
-            box-shadow: var(--glass-shadow);
-        }
+        .glass { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: var(--glass-border); border-radius: 12px; box-shadow: var(--glass-shadow); }
 
-        /* --- شاشة البداية --- */
-        #landing-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            flex-direction: column; z-index: 2000;
-        }
+        #landing-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 2000; }
+        #landing-screen h1 { font-family: var(--font-main); font-size: 2.5rem; margin-bottom: 20px; }
 
-        #landing-screen h1 {
-            font-family: var(--font-main);
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
+        .start-btn { font-family: var(--font-ui); font-size: 1.1rem; padding: 8px 35px; color: white; cursor: pointer; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); }
 
-        .start-btn {
-            font-family: var(--font-ui);
-            font-size: 1.1rem;
-            padding: 8px 35px;
-            color: white;
-            cursor: pointer;
-            border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.1);
-        }
+        #game-container { display: none; width: 100%; max-width: 380px; padding: 12px; flex-direction: column; gap: 12px; }
+        header h1 { font-family: var(--font-main); text-align: center; font-size: 1.5rem; margin: 10px 0; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* --- واجهة اللعبة --- */
-        #game-container {
-            display: none;
-            width: 100%;
-            max-width: 380px;
-            padding: 12px;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .score-card { padding: 12px; text-align: center; }
+        .team-name { font-family: var(--font-main); font-size: 1.1rem; opacity: 0.9; }
+        .score-display { font-family: var(--font-ui); font-size: 2.8rem; font-weight: 450; line-height: 2; }
 
-        header h1 {
-            font-family: var(--font-main);
-            text-align: center;
-            font-size: 1.5rem;
-            margin: 10px 0;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .actions { display: flex; gap: 8px; margin-top: 10px; }
+        .btn { font-family: var(--font-ui); background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); color: #e2e8f0; padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; flex: 1; cursor: pointer; }
 
-        .score-card {
-            padding: 12px;
-            text-align: center;
-        }
-
-        .team-name {
-            font-family: var(--font-main); /* خط ليون */
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .score-display {
-            font-family: var(--font-ui); /* خط JF */
-            font-size: 2.8rem;
-            font-weight: 450;
-            line-height: 2;
-        }
-
-        .actions {
-            display: flex; gap: 8px; margin-top: 10px;
-        }
-
-        .btn {
-            font-family: var(--font-ui);
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #e2e8f0;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            flex: 1;
-            cursor: pointer;
-        }
-
-        .info-pill {
-            font-family: var(--font-ui);
-            padding: 8px;
-            text-align: center;
-            font-size: 0.9rem;
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-        }
-
+        .info-pill { font-family: var(--font-ui); padding: 8px; text-align: center; font-size: 0.9rem; background: rgba(0,0,0,0.2); border-radius: 10px; }
         .history-section { padding: 12px; }
-
-        .history-header {
-            font-family: var(--font-ui);
-            display: flex; justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 6px; font-size: 0.8rem; opacity: 0.6;
-        }
-
+        .history-header { font-family: var(--font-ui); display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; font-size: 0.8rem; opacity: 0.6; }
         .history-list { max-height: 140px; overflow-y: auto; font-family: var(--font-ui); }
-
-        .history-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+        .history-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
         .delete-btn { color: #f87171; font-size: 0.75rem; background: rgba(248, 113, 113, 0.1); padding: 2px 8px; border-radius: 6px; }
+        .reset-btn { font-family: var(--font-ui); background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 8px 25px; border-radius: 20px; font-size: 0.9rem; }
+        .credits { font-family: var(--font-main); font-size: 0.75rem; opacity: 0.5; margin-top: 10px; }
 
-        .reset-btn {
-            font-family: var(--font-ui);
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: #fca5a5; padding: 8px 25px; border-radius: 20px; font-size: 0.9rem;
-        }
-
-        .credits {
-            font-family: var(--font-main); /* خط ليون */
-            font-size: 0.75rem;
-            opacity: 0.5;
-            margin-top: 10px;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center; z-index: 3000;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 3000; }
         .modal { background: #1e293b; padding: 20px; border-radius: 15px; width: 280px; text-align: center; font-family: var(--font-ui); }
         .modal input { width: 100%; padding: 12px; font-size: 1.8rem; text-align: center; margin-bottom: 15px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: white; }
     </style>
@@ -258,7 +145,7 @@
     </div>
 
     <script>
-        // الكود البرمجي (المنطق)
+        // كود المنطق الخاص بك
         const STORAGE_KEY = 'wathiq_fonts_v1';
         let state = { started: false, score1: 0, score2: 0, name1: "الفريق الأول", name2: "الفريق الثاني", gameRound: 0, historyLog: [], timerStartTime: null };
 
@@ -357,10 +244,15 @@
         }
 
         function resetGame() { if(confirm("تصفير؟")) { localStorage.removeItem(STORAGE_KEY); location.reload(); } }
+
+        // --- كود تسجيل الـ PWA ليعمل بدون إنترنت ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker Registered'))
+                .catch(err => console.log('Registration Failed', err));
+            });
+        }
     </script>
 </body>
 </html>
-
-
-
-
