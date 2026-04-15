@@ -679,7 +679,7 @@
         <div class="info-pill glass" id="diffDisplay">تعادل</div>
         
         <div class="info-row">
-            <div class="info-pill glass" style="flex: 1;" id="gameCounterDisplay">كیم: 0</div>
+            <div class="info-pill glass" style="flex: 1;" id="gameCounterDisplay">كيم: 0</div>
             <div class="info-pill glass" style="flex: 1;" id="timerDisplay">00:00</div>
         </div>
 
@@ -806,7 +806,7 @@
             document.getElementById('name2').innerText = state.name2;
             document.getElementById('h-name1').innerText = state.name1;
             document.getElementById('h-name2').innerText = state.name2;
-            document.getElementById('gameCounterDisplay').innerText = `كیم: ${state.gameRound}`;
+            document.getElementById('gameCounterDisplay').innerText = `كيم: ${state.gameRound}`;
             updateDifference();
             rebuildHistory();
         }
@@ -868,7 +868,7 @@
                         <span class="history-score">${item.p1}</span>
                     </div>
                     <div class="history-center">
-                        <span class="history-round">كیم ${roundNum}</span>
+                        <span class="history-round">كيم ${roundNum}</span>
                         <span class="delete-btn" onclick="deleteEntry(${item.id})">حذف</span>
                     </div>
                     <div class="history-item">
