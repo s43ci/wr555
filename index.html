@@ -43,8 +43,8 @@
         }
 
         [data-theme="light"] {
-            --bg-body: #f1f5f9;
-            --bg-grid: rgba(203, 213, 225, 0.4);
+            --bg-body: #f8fafc;
+            --bg-grid: rgba(100, 116, 139, 0.15); /* More visible grid */
             --glass-bg: rgba(255, 255, 255, 0.8);
             --glass-border: 1px solid rgba(0, 0, 0, 0.05);
             --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -53,7 +53,7 @@
             --text-color: #0f172a;
             --text-dim: #64748b;
             --info-bg: rgba(0, 0, 0, 0.02);
-            --glow-color: rgba(2, 132, 199, 0.08);
+            --glow-color: rgba(2, 132, 199, 0.1);
         }
 
         * { 
@@ -445,15 +445,22 @@
 
         .grid-pattern {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
             background-image: 
-                linear-gradient(var(--bg-grid) 1px, transparent 1px),
-                linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.5;
-            mask-image: radial-gradient(circle, black 40%, transparent 100%);
-            -webkit-mask-image: radial-gradient(circle, black 40%, transparent 100%);
+                linear-gradient(var(--bg-grid) 1.5px, transparent 1.5px),
+                linear-gradient(90deg, var(--bg-grid) 1.5px, transparent 1.5px);
+            background-size: 60px 60px;
+            opacity: 0.3;
+            transform: perspective(1000px) rotateX(60deg);
+            animation: gridMove 30s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { transform: perspective(1000px) rotateX(60deg) translateY(0); }
+            to { transform: perspective(1000px) rotateX(60deg) translateY(60px); }
         }
 
         .glow-orbs {
@@ -465,51 +472,76 @@
         .glow-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: orbFloat var(--duration) ease-in-out infinite alternate;
+            filter: blur(100px);
+            opacity: 0.5;
+            animation: orbFloat 20s infinite alternate ease-in-out;
         }
 
         @keyframes orbFloat {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(var(--moveX), var(--moveY)) scale(1.2); }
+            0% { transform: translate(-10%, -10%) scale(1); }
+            50% { transform: translate(10%, 10%) scale(1.1); }
+            100% { transform: translate(-5%, 15%) scale(0.9); }
         }
 
         .glow-orb:nth-child(1) {
-            width: 300px; height: 300px;
-            background: radial-gradient(circle, #38bdf8 0%, transparent 70%);
-            top: -100px; left: -100px;
-            --duration: 15s; --moveX: 50px; --moveY: 80px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
+            top: -10%; left: -10%;
+            animation-duration: 20s;
         }
 
         .glow-orb:nth-child(2) {
-            width: 400px; height: 400px;
+            width: 700px; height: 700px;
             background: radial-gradient(circle, #2563eb 0%, transparent 70%);
-            bottom: -150px; right: -150px;
-            --duration: 20s; --moveX: -60px; --moveY: -40px;
+            bottom: -15%; right: -15%;
+            animation-duration: 25s;
+            animation-delay: -5s;
         }
 
         .glow-orb:nth-child(3) {
-            width: 250px; height: 250px;
-            background: radial-gradient(circle, #0ea5e9 0%, transparent 70%);
-            top: 40%; left: 30%;
-            --duration: 18s; --moveX: 40px; --moveY: -60px;
-            opacity: 0.4;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+            top: 30%; left: 20%;
+            animation-duration: 30s;
+            animation-delay: -10s;
+            opacity: 0.2;
+        }
+
+        [data-theme="light"] .glow-orb:nth-child(1) { background: radial-gradient(circle, #93c5fd 0%, transparent 70%); }
+        [data-theme="light"] .glow-orb:nth-child(2) { background: radial-gradient(circle, #c4b5fd 0%, transparent 70%); }
+        [data-theme="light"] .glow-orb:nth-child(3) { background: radial-gradient(circle, #7dd3fc 0%, transparent 70%); }
+
+        /* Floating Light Spots */
+        .light-spot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            [data-theme="light"] & { background: #3b82f6; } /* Blue spots for light mode */
+            border-radius: 50%;
+            filter: blur(1px);
+            opacity: 0.3;
+            animation: drift 15s infinite linear;
+        }
+
+        @keyframes drift {
+            from { transform: translateY(100vh) translateX(0); }
+            to { transform: translateY(-10vh) translateX(50px); }
         }
 
         /* Theme Toggle */
         .theme-toggle {
             position: fixed;
-            top: 20px;
-            left: 20px;
-            width: 45px;
-            height: 45px;
+            top: 25px;
+            left: 25px;
+            width: 50px;
+            height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            z-index: 1000;
-            border-radius: 12px;
+            z-index: 5000; /* Extremely high to stay above everything */
+            border-radius: 15px;
         }
 
         .theme-toggle svg {
@@ -604,7 +636,7 @@
             <div class="glow-orb"></div>
             <div class="glow-orb"></div>
         </div>
-        <div class="particles" id="particles"></div>
+        <div id="spots-container"></div>
     </div>
 
     <!-- Theme Toggle -->
@@ -647,7 +679,7 @@
         <div class="info-pill glass" id="diffDisplay">تعادل</div>
         
         <div class="info-row">
-            <div class="info-pill glass" style="flex: 1;" id="gameCounterDisplay">الكيم: 0</div>
+            <div class="info-pill glass" style="flex: 1;" id="gameCounterDisplay">كیم: 0</div>
             <div class="info-pill glass" style="flex: 1;" id="timerDisplay">00:00</div>
         </div>
 
@@ -704,36 +736,18 @@
             }
         }
 
-        createParticles();
-
-        function createFloatingDots() {
-            const container = document.getElementById('particles');
-            const count = 30;
-            for (let i = 0; i < count; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'particle';
-                dot.style.left = Math.random() * 100 + 'vw';
-                dot.style.top = Math.random() * 100 + 'vh';
-                dot.style.width = (2 + Math.random() * 3) + 'px';
-                dot.style.height = dot.style.width;
-                dot.style.background = 'white';
-                dot.style.opacity = (0.1 + Math.random() * 0.4).toString();
-                dot.style.animation = `particleFade ${3 + Math.random() * 5}s infinite alternate`;
-                container.appendChild(dot);
+        function createSpots() {
+            const container = document.getElementById('spots-container');
+            for(let i=0; i<15; i++) {
+                const spot = document.createElement('div');
+                spot.className = 'light-spot';
+                spot.style.left = Math.random() * 100 + 'vw';
+                spot.style.animationDelay = Math.random() * 15 + 's';
+                spot.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(spot);
             }
         }
-
-        createFloatingDots();
-        
-        // Add particle pulse animation to CSS
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes particleFade {
-                0% { opacity: 0.1; transform: scale(0.8); }
-                100% { opacity: 0.6; transform: scale(1.2); }
-            }
-        `;
-        document.head.appendChild(style);
+        createSpots();
 
         function toggleTheme() {
             const currentTheme = document.documentElement.getAttribute('data-theme');
@@ -792,7 +806,7 @@
             document.getElementById('name2').innerText = state.name2;
             document.getElementById('h-name1').innerText = state.name1;
             document.getElementById('h-name2').innerText = state.name2;
-            document.getElementById('gameCounterDisplay').innerText = `الگيم: ${state.gameRound}`;
+            document.getElementById('gameCounterDisplay').innerText = `كیم: ${state.gameRound}`;
             updateDifference();
             rebuildHistory();
         }
@@ -854,7 +868,7 @@
                         <span class="history-score">${item.p1}</span>
                     </div>
                     <div class="history-center">
-                        <span class="history-round">كيم ${roundNum}</span>
+                        <span class="history-round">كیم ${roundNum}</span>
                         <span class="delete-btn" onclick="deleteEntry(${item.id})">حذف</span>
                     </div>
                     <div class="history-item">
